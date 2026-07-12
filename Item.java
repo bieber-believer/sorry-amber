@@ -43,7 +43,8 @@ public class Item {
      * Decrements the quanityt of the item by 1
      */
     public void decrementQty(){
-        this.quantity--;
+        if(this.quantity > 0)
+            this.quantity--;
     }
 
     /**
