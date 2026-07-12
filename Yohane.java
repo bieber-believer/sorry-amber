@@ -199,7 +199,7 @@ public class Yohane {
         if(item.getName().equalsIgnoreCase("Noppo Bread"))
             heal((float) 0.5); // the possible item we can get rn is only noppo bread for mco1
         
-        item.decerementQty();
+        item.decrementQty();
         if(item.getQuantity() == 0){
             iventory.remove(item);
             currentItemIndex = -1; // players has to [ ] to have smth on hand
