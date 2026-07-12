@@ -11,14 +11,14 @@ public class Yohane {
     private ArrayList<Item> iventory;
     private int currentItemIndex;
     private int gold;
-    private int x, y; // for her position: x will be row, y will be column
+    private int x, y; // for her position: x will be column, y will be row
 
     /**
      * Creates a Yohane object at the given starting position. By default, HP 
      * is 3/3 , 0 gold, and empty inventory
      * 
-     * @param x starting x position (the row in the 2d array)
-     * @param y starting y position (the col in the 2d array)
+     * @param x starting x position (the col in the 2d array)
+     * @param y starting y position (the row in the 2d array)
      */
     public Yohane(int x, int y){
         this.x = x;
