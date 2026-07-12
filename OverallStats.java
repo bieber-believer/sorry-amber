@@ -8,7 +8,7 @@
 import java.util.ArrayList;
 
 public class OverallStats {
-    private ArrayList<Idol> aquors; // the aquors ppl
+    private ArrayList<Idol> aqours; // the aqours ppl
     private int numSiren; // # of times siren was killed
     private int gamesLost; // # of times player got pwned
     private int goldSpent; // total gold spent
@@ -17,16 +17,16 @@ public class OverallStats {
      * Creates an OverallStats object. Instansitaties the Aquors array list and initializes other values to 0;
      */
     public OverallStats(){
-        aquors = new ArrayList<>();
+        aqours = new ArrayList<>();
 
-        aquors.add(new Idol("Chika", "Yasudaya Ryokan"));
-        aquors.add(new Idol("Riko", "Numazu Deep Sea Aquarium"));
-        aquors.add(new Idol("You", "Izu-Mito Sea Paradise"));
-        aquors.add(new Idol("Hanamaru", "Shougetsu Confectionary"));
-        aquors.add(new Idol("Ruby", "Nagahama Castle Ruins"));
-        aquors.add(new Idol("Dia", "Numazugoyotei"));
-        aquors.add(new Idol("Kanan", "Uchiura Bay Pier"));
-        aquors.add(new Idol("Mari", "Awashima Marine Park"));
+        aqours.add(new Idol("Chika", "Yasudaya Ryokan"));
+        aqours.add(new Idol("Riko", "Numazu Deep Sea Aquarium"));
+        aqours.add(new Idol("You", "Izu-Mito Sea Paradise"));
+        aqours.add(new Idol("Hanamaru", "Shougetsu Confectionary"));
+        aqours.add(new Idol("Ruby", "Nagahama Castle Ruins"));
+        aqours.add(new Idol("Dia", "Numazugoyotei"));
+        aqours.add(new Idol("Kanan", "Uchiura Bay Pier"));
+        aqours.add(new Idol("Mari", "Awashima Marine Park"));
 
         numSiren = 0;
         gamesLost = 0;
@@ -38,8 +38,8 @@ public class OverallStats {
      * 
      * @return ArrayList of idols
      */
-    public ArrayList<Idol> getAquors() {
-        return aquors;
+    public ArrayList<Idol> getAqours() {
+        return aqours;
     }
 
     /**
