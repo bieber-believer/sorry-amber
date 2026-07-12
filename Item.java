@@ -39,7 +39,10 @@ public class Item {
         this.quantity++;
     }
 
-    public void decerementQty(){
+    /**
+     * Decrements the quanityt of the item by 1
+     */
+    public void decrementQty(){
         this.quantity--;
     }
 
