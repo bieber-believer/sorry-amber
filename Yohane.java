@@ -11,7 +11,7 @@ public class Yohane {
     private ArrayList<Item> iventory;
     private int currentItemIndex;
     private int gold;
-    private int x, y; // for her position: x will be column, y will be row
+    private int row, col; // Yohane's position
 
     /**
      * Creates a Yohane object at the given starting position. By default, HP 
@@ -20,9 +20,9 @@ public class Yohane {
      * @param x starting x position (the col in the 2d array)
      * @param y starting y position (the row in the 2d array)
      */
-    public Yohane(int x, int y){
-        this.x = x;
-        this.y = y;
+    public Yohane(int row, int col){
+        this.row = row;
+        this.col = col;
         this.hp = 3;
         this.maxHp = 3;
         this.gold = 0;
@@ -35,21 +35,21 @@ public class Yohane {
      * Updates Yohane's position given the x and y.
      * Called by dungeon after checking move input
      * 
-     * @param x new row position
-     * @param y new col position
+     * @param row new row position
+     * @param col new col position
      */
-    public void setPosition(int x, int y){
-        this.x = x;
-        this.y = y;
+    public void setPosition(int row, int col){
+        this.row = row;
+        this.col = col;
     }
 
     /**
      * Returns Yohane's current row position
      * 
-     * @return current row (x)
+     * @return current row
      */
-    public int getX() {
-        return x;
+    public int getRow() {
+        return this.row;
     }
 
     /**
@@ -57,8 +57,8 @@ public class Yohane {
      * 
      * @return current column (y)
      */
-    public int getY() {
-        return y;
+    public int getCol() {
+        return this.col;
     }
 
     // methods that has smth to do with hp and killing the evil things
@@ -97,7 +97,7 @@ public class Yohane {
      * @return current hp
      */
     public float getHp() {
-        return hp;
+        return this.hp;
     }
 
     /**
@@ -106,7 +106,7 @@ public class Yohane {
      * @return max hp
      */
     public float getMaxHp() {
-        return maxHp;
+        return this.maxHp;
     }
 
     // for the moolah
@@ -125,7 +125,7 @@ public class Yohane {
      * @return current gold
      */
     public int getGold() {
-        return gold;
+        return this.gold;
     }
 
     // for the inv
@@ -212,6 +212,6 @@ public class Yohane {
      * @return list of items in inventory
      */
     public ArrayList<Item> getIventory() {
-        return iventory;
+        return this.iventory;
     }
 }
