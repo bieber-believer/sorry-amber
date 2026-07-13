@@ -109,18 +109,6 @@ public class Floor {
         }
     }
 
-    public void spawnBats() {
-
-    }
-
-    public void placeTreasure() {
-
-    }
-
-    public void placeExit() {
-
-    }
-
     public void displayHeader() {
         System.out.println("Dungeon #" + dungeonNumber + ": " + dungeonName);
         System.out.println("Floor " + floorNumber + " of " + totalFloors);
