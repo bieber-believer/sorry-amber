@@ -12,8 +12,7 @@ public class Floor {
     private int totalFloors;
     private boolean floorFinished;
     private int floorNumber;
-    private int dungeonNumber;
-    private String dungeonName;
+    private int totalFloors;
 
     private static final String[] MAP1_TEMPLATE = {
             "*******************************************************",
