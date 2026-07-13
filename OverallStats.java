@@ -62,11 +62,18 @@ public class OverallStats {
     }
 
     /**
-     * Returns the gold spent in Hanamaru's shop
+     * Returns the updated gold spent in Hanamaru's shop
      * 
      * @return total gold spent
      */
-    public int getGoldSpent() {
-        return goldSpent;
+    public int getGoldSpent(int amount) {
+        return goldSpent += amount;
     }
-}
+
+    public void addGamesLost() {
+        gamesLost++;
+    }
+
+    public void addNumSiren() {
+        numSiren++;
+    }
