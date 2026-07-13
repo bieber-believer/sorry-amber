@@ -4,15 +4,12 @@ public class Floor {
     private Tile[][] map;
     private ArrayList<Bat> bats;
     private Yohane yohane;
-    private int treasureRow;
-    private int treasureCol;
-    private boolean treasureClaimed;
-    private int exitRow;
-    private int exitCol;
     private int totalFloors;
     private boolean floorFinished;
     private int floorNumber;
-    private int totalFloors;
+    private int dungeonNumber;
+    private String dungeonName;
+    private int playerTurns = 0;
 
     private static final String[] MAP1_TEMPLATE = {
             "*******************************************************",
@@ -34,9 +31,12 @@ public class Floor {
         this.floorNumber = floorNumber;
         this.totalFloors = totalFloors;
         bats = new ArrayList<>();
-        treasureClaimed = false;
         generateMap();
     }
+
+    public Yohane getYohane() {
+        return yohane;
+}
 
     private char getTileSymbol(Tile tile) {
         switch(tile) {
@@ -56,6 +56,8 @@ public class Floor {
                 return 'E';
             case BORDER:
                 return '*';
+            case GOLD:
+                return 'g';
             default:
                 return ' ';
         }
@@ -87,13 +89,9 @@ public class Floor {
                         break;
                     case 'T':
                         map[row][col] = Tile.TREASURE;
-                        treasureRow = row;
-                        treasureCol = col;
                         break;
                     case 'E':
                         map[row][col] = Tile.EXIT;
-                        exitRow = row;
-                        exitCol = col;
                         break;
                     case 'Y':
                         map[row][col] = Tile.PASSABLE;
@@ -101,7 +99,7 @@ public class Floor {
                         break;
                     case 'b':
                         map[row][col] = Tile.PASSABLE;
-                        bats.add(new Bat(row, col, 0.5f, 20, 1));
+                        bats.add(new Bat(row, col, 0.5f, 5, 2));
                         break;
                 }
             }
@@ -168,6 +166,7 @@ public class Floor {
             case PASSABLE:
             case HEAT:
             case EXIT:
+            case GOLD:
                 return true;
             default:
                 return false;
@@ -183,6 +182,11 @@ public class Floor {
             default:
                 return false;
         }
+    }
+
+    private void moveBats() {
+        for(Bat bat : bats)
+        bat.takeTurn(yohane, this);
     }
 
     public void playerMovement(char direction){
@@ -202,15 +206,42 @@ public class Floor {
             case 'D':
                 newCol++;
                 break;
+            case 'X':
+                waitTurn();
+                return;
+            default:
+                return;
         }
+
+        Bat deadBat = null;
+
+        for (Bat bat : bats) {
+            if (bat.getRow() == newRow && bat.getCol() == newCol) {
+                deadBat = bat;
+                break;
+            }
+        }
+        
+        if (deadBat != null) {
+            bats.remove(deadBat);
+            map[newRow][newCol] = Tile.GOLD;
+
+            applyHeatDamage();
+            endTurn();
+            return;
+        }
+        
         Tile tile = map[newRow][newCol];
         switch (tile){
             case PASSABLE:
                 yohane.setPosition(newRow, newCol);
+                endTurn();
                 break;
 
             case WALL:
                 map[newRow][newCol] = Tile.PASSABLE;
+                applyHeatDamage();
+                endTurn();
                 break;
 
             case TREASURE:
@@ -221,13 +252,16 @@ public class Floor {
                     yohane.addItem(new Item("Noppo Bread"));
                 }
 
-                treasureClaimed = true;
                 map[newRow][newCol] = Tile.PASSABLE;
+                applyHeatDamage();
+                endTurn();
                 break;
 
             case SPIKE:
                 yohane.takeDamage(0.5);
                 map[newRow][newCol] = Tile.PASSABLE;
+                applyHeatDamage();
+                endTurn();
                 break;
 
             case EXIT:
@@ -237,6 +271,7 @@ public class Floor {
 
             case HEAT:
                 yohane.setPosition(newRow, newCol);
+                endTurn();
                 break;
 
             case WATER:
@@ -245,8 +280,38 @@ public class Floor {
 
             case BORDER:
                 System.out.println("You can't go there!");
+                break;
 
+            case GOLD:
+                yohane.addGold(5);
+                map[newRow][newCol] = Tile.PASSABLE;
+                yohane.setPosition(newRow, newCol);
+                endTurn();
+                break;
+
+            default:
+                return;
         }
+    }
+
+    private void endTurn() {
+        playerTurns++;
+        if (playerTurns % 2 == 0)
+            moveBats();
+    }
+
+    public void waitTurn() {
+        applyHeatDamage();
+        endTurn();
+    }
+
+    private void applyHeatDamage() {
+        if(map[yohane.getRow()][yohane.getCol()] == Tile.HEAT)
+            yohane.takeDamage(0.5f);
+        }
+
+    public boolean isFloorFinished() {
+        return floorFinished;
     }
 }
 
