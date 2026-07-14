@@ -104,8 +104,8 @@ public class Game {
         while (!floor.isFloorFinished() && floor.getYohane().getHp() > 0) {
             floor.displayFloor();
 
-            System.out.print("Move (W/A/S/D): ");
-            String inputStr = scanner.nextLine().trim();
+            System.out.print("Move (W/A/S/D), Use Item(Spacebar): ");
+            String inputStr = scanner.nextLine();
 
             if (!inputStr.isEmpty()) {
                 char input = Character.toUpperCase(inputStr.charAt(0));
