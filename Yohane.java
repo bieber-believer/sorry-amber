@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Yohane {
     private float hp, maxHp; // her current hp and max hp shec can have
-    private ArrayList<Item> iventory;
+    private ArrayList<Item> inventory;
     private int currentItemIndex;
     private int gold;
     private int row, col; // Yohane's position
@@ -23,8 +23,8 @@ public class Yohane {
     public Yohane(int row, int col){
         this.row = row;
         this.col = col;
-        this.hp = 3;
-        this.maxHp = 3;
+        this.hp = 3.0;
+        this.maxHp = 3.0;
         this.gold = 0;
         this.iventory = new ArrayList<>();
         this.currentItemIndex = -1; // -1 if inventory is empty
