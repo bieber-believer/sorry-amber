@@ -15,5 +15,6 @@ public enum Tile {
     HEAT,     // h
     TREASURE, // T
     EXIT,     // E
-    BORDER   //  *
+    BORDER,   //  *
+    GOLD      // g
 }
