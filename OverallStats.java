@@ -70,14 +70,25 @@ public class OverallStats {
         return goldSpent;
 }
 
+/**
+ * Adds the given amount to the total gold spent
+ * 
+ * @param amount amount of gold to add
+ */
     public void addGoldSpent(int amount) {
         goldSpent += amount;
 }
 
+    /**
+     * Increments the number of games lost by 1
+     */
     public void addGamesLost() {
         this.gamesLost++;
     }
 
+    /**
+     * Increments the number of times the siren was deafeated by 1
+     */
     public void addNumSiren() {
         numSiren++;
     }

@@ -1,3 +1,9 @@
+/**
+ * Handles the menu screens.
+ * 
+ * Menu
+ */
+
 import java.util.Scanner;
 
 public class Menu {
@@ -10,10 +16,21 @@ public class Menu {
     private static final String RED = "\u001B[38;2;255;0;0m";
     private static final String CYAN = "\u001B[38;2;0;255;255m";
 
+    /**
+     * Creates a Menu object using the given scannerm which will 
+     * be used for reading input
+     * @param scanner
+     */
     public Menu(Scanner scanner) {
         this.scanner = scanner;
     }
 
+    /**
+     * Displayes the main menu screen, showing New Game or New Game+ 
+     * depending if a player has played
+     * 
+     * @param hasPlayedBefore whether the player has played before
+     */
     public void displayMenu(boolean hasPlayedBefore) {
 
         System.out.println(BLUE + "       ************************************************");
@@ -33,6 +50,12 @@ public class Menu {
         System.out.println();
     }
 
+    /**
+     * Displayes the menu and reads player's choice
+     * 
+     * @param hasPlayedBefore whether the player has played before
+     * @return choice of player
+     */
     public char getChoice(boolean hasPlayedBefore) {
         char choice;
         String errorMessage = null;
@@ -65,6 +88,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Displays the overall status screen
+     * 
+     * @param stats overall stats to read from
+     */
     public void displayStatus(OverallStats stats) {
 
         System.out.println(BLUE + "       ************************************************" + RESET);
@@ -96,6 +124,16 @@ public class Menu {
         scanner.nextLine();
     }
 
+    /**
+     * Displays the end screen of a run, either a win and game over, and
+     * asks player if they wanna play again, go back to menu, or quit.
+     * 
+     * @param won whether the run ended in a win
+     * @param hasPlayedBefore whether the player has played before
+     * @param deathCause cause of Yohane's death if player lost
+     * 
+     * @return players choice on what to do next after the game
+     */
     public char displayEndScreen(boolean won, boolean hasPlayedBefore, String deathCause) {
         System.out.println();
 
@@ -144,6 +182,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Displays the dungeon selection screen and read player input
+     * 
+     * @return the number of chosen dungeon
+     */
     public int chooseDungeon() {
         while (true) {
             System.out.println(BLUE + "       ************************************************" + RESET);

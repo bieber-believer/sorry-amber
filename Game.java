@@ -1,3 +1,10 @@
+/**
+ * Handles the overall game. In charge of the menu loop, new playthroughs
+ * and the dungeon gameplay.
+ * 
+ * Game
+ */
+
 import java.util.Scanner;
 
 public class Game {
@@ -9,12 +16,18 @@ public class Game {
     private OverallStats stats;
     private int carriedOverGold = 0;
 
+    /**
+     * Constructs a game
+     */
     public Game() {
         scanner = new Scanner(System.in);
         menu = new Menu(scanner);
         stats = new OverallStats();
     }
 
+    /**
+     * Handles the main menu loop
+     */
     public void start() {
         boolean running = true;
 
@@ -67,6 +80,10 @@ public class Game {
         }
     }
 
+    /**
+     * Lets player choose a dungeon then run the dungeon until the floor
+     * is finished or Yohane dies
+     */
     private void playGame() {
         int dungeonChoice = menu.chooseDungeon();
 
@@ -75,7 +92,7 @@ public class Game {
                 dungeon = new Dungeon();
                 break;
 
-            case 2:
+            case 2: // only 1 deungeon implemented so far
             case 3:
                 return;
         }

@@ -1,3 +1,11 @@
+/**
+ * Represents a single floor within the dungeon. Holds the floor layout, bats on 
+ * the floor, and Yohane. Handles displaying floor and floor information, processes
+ * player movement and bat turns.
+ * 
+ * Floor
+ */
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,9 +19,10 @@ public class Floor {
     private int dungeonNumber;
     private String dungeonName;
     private int playerTurns = 0;
-    private String message = "";
-    private String deathCause = "";
+    private String message = ""; // messages during the game
+    private String deathCause = ""; // cause of death
 
+    //colors 
     private static final String RESET = "\u001B[0m";
     private static final String RED = "\u001B[38;2;255;0;0m";
     private static final String GREEN = "\u001B[38;2;0;180;50m";
@@ -39,6 +48,16 @@ public class Floor {
             "*.......x..................v.......b.....h.....vv.b..E*",
             "*******************************************************"
     };
+
+    /**
+     * Creates a Floor with the given dungeon number, name, floor number,
+     * and total floor count. It creates the bat list and generates the map
+     * 
+     * @param dungeonNumber number of the dungeon this floor belongs to
+     * @param dungeonName name of the dungeon
+     * @param floorNumber current floor number
+     * @param totalFloors total number of floors in the dungeon
+     */
     public Floor(int dungeonNumber, String dungeonName, int floorNumber, int totalFloors) {
         this.dungeonNumber = dungeonNumber;
         this.dungeonName = dungeonName;
@@ -48,17 +67,28 @@ public class Floor {
         generateMap();
     }
 
+    /**
+     * Returns the Yohane object on the floor
+     * 
+     * @return yohane
+     */
     public Yohane getYohane() {
         return yohane;
     }
 
+    /**
+     * Returns the colored text of whatever is in the tile position
+     * 
+     * @param row row to check
+     * @param col column to checl
+     * @return colored string of whatever tile is in the position
+     */
     private String tileToColoredString(int row, int col) {
-
-        // Yohane
+        // yohane
         if (yohane.getRow() == row && yohane.getCol() == col)
             return PINK + "Y " + RESET;
 
-        // Bat
+        // bat
         for (Bat bat : bats) {
             if (bat.getRow() == row && bat.getCol() == col) {
                 if (bat.hasJustAttacked())
@@ -68,7 +98,7 @@ public class Floor {
             }
         }
 
-        // Tiles
+        // tiles
         switch (map[row][col]) {
             case PASSABLE:
                 return ". ";
@@ -102,10 +132,13 @@ public class Floor {
         }
     }
 
+    /**
+     * Builds the map from MAP_1 TEMPLATE. Also creates Yohane and Bat objects
+     */
     public void generateMap() {
         map = new Tile[MAP1_TEMPLATE.length][MAP1_TEMPLATE[0].length()];
-        for (int row = 0; row < MAP1_TEMPLATE.length; row++) {
-            for (int col = 0; col < MAP1_TEMPLATE[row].length(); col++) {
+        for (int row = 0; row < MAP1_TEMPLATE.length; row++) { // printing row
+            for (int col = 0; col < MAP1_TEMPLATE[row].length(); col++) { // printing column
                 char symbol = MAP1_TEMPLATE[row].charAt(col);
                 switch (symbol) {
                     case '.':
@@ -145,25 +178,33 @@ public class Floor {
         }
     }
 
+    /**
+     * Displays info regarding the dungeon like dungeon number, name, and floor 
+     * progress
+     */
     public void displayHeader() {
         System.out.println("Dungeon #" + dungeonNumber + ": " + dungeonName);
         System.out.println("Floor " + floorNumber + " of " + totalFloors);
         System.out.println();
-
     }
 
+    /**
+     * Displays Yohane's current stats like HP, gold, and item on hand
+     */
     public void displayStats() {
         System.out.printf("%-30s%30s%n",
                 "HP: " + yohane.getHp() + "/" + yohane.getMaxHp(),
                 "Gold: " + yohane.getGold());
 
         Item item = yohane.getCurrentItem();
-        System.out.println("Items on Hand: " +
-                (item == null ? "None" : item.getName()));
+        System.out.println("Items on Hand: " + (item == null ? "None" : item.getName()));
 
         System.out.println();
     }
 
+    /**
+     * Displays the full map of the floor
+     */
     public void displayMap() {
         for (int row = 0; row < map.length; row++) {
             for (int col = 0; col < map[row].length; col++) {
@@ -173,6 +214,10 @@ public class Floor {
         }
     }
 
+    /**
+     * Displays the full interface of the dungeon like the header, stats,
+     * map, and a message if it is not empty
+     */
     public void displayFloor() {
         displayHeader();
         displayStats();
@@ -186,6 +231,13 @@ public class Floor {
         }
     }
 
+    /**
+     * Checks whether Yohane can walk onto a tile at the given position
+     * 
+     * @param row row to check
+     * @param col column to check
+     * @return true if Yohane can pass through it, false otherwise
+     */
     public boolean isPassableForYohane(int row, int col) {
         Tile tile = map[row][col];
 
@@ -200,6 +252,13 @@ public class Floor {
         }
     }
 
+    /**
+     * Checks whether a bat can walk onto a tile at the given position
+     * 
+     * @param row row to check
+     * @param col column to check
+     * @return true if the bat can pass through it, false otherwise
+     */
     public boolean isPassableForBat(int row, int col) {
         Tile tile = map[row][col];
         switch (tile) {
@@ -211,6 +270,10 @@ public class Floor {
         }
     }
 
+    /**
+     * Makes the bats in the floor take its turn and checks whether it killed 
+     * Yohane
+     */
     private void moveBats() {
         for(Bat bat : bats)
             bat.takeTurn(yohane, this);
@@ -221,6 +284,11 @@ public class Floor {
         }
     }
 
+    /**
+     * Processes the players movement as well as tile interactions
+     * 
+     * @param direction direction yohane will move (WASD)
+     */
     public void playerMovement(char direction){
         int newRow = yohane.getRow();
         int newCol = yohane.getCol();
@@ -256,7 +324,7 @@ public class Floor {
             bats.remove(deadBat);
             map[newRow][newCol] = Tile.GOLD;
             message += GREEN + "You killed the bat! Collect gold from the ground." + RESET + "\n";
-            applyHeatDamage();
+            applyHeatDamage(); // check to see if she on heat tile
             endTurn();
             return;
         }
@@ -270,7 +338,8 @@ public class Floor {
 
             case WALL:
                 map[newRow][newCol] = Tile.PASSABLE;
-                message += GREEN + "Obstacle cleared! You can now pass." + RESET + "\n";                applyHeatDamage();
+                message += GREEN + "Obstacle cleared! You can now pass." + RESET + "\n";                
+                applyHeatDamage(); // check to see if she on heat tile
                 endTurn();
                 break;
 
@@ -286,7 +355,7 @@ public class Floor {
                     message += GREEN + "You got Noppo Bread!" + RESET + "\n";
                 }
 
-                applyHeatDamage();
+                applyHeatDamage(); // check to see if she on heat tile
                 endTurn();
                 break;
 
@@ -297,7 +366,7 @@ public class Floor {
                 if (yohane.getHp() <= 0) {
                     this.deathCause = "Spike Damage";
                 }
-                applyHeatDamage();
+                applyHeatDamage(); // check to see if she on heat tile
                 endTurn();
                 break;
 
@@ -332,18 +401,29 @@ public class Floor {
         }
     }
 
+    /**
+     * Increments player's turn count and triggers bat movement
+     */
     private void endTurn() {
         playerTurns++;
         if (playerTurns % 2 == 0)
             moveBats();
     }
 
+    /**
+     * Handles invalid input and applies heat damage of Yohane stays on
+     * top of a heat tile.
+     */
     public void waitTurn() {
-        applyHeatDamage();
-       message += RED + "Invalid input! You stayed in the same place." + RESET + "\n";
+        applyHeatDamage(); //check if she is on heat tile
+        message += RED + "Invalid input! You stayed in the same place." + RESET + "\n";
         endTurn();
     }
 
+    /**
+     * Apples heat dmaage to Yohane if she is currently standing ona heat tile
+     * and checks whether it kills her
+     */
     private void applyHeatDamage() {
         if (map[yohane.getRow()][yohane.getCol()] == Tile.HEAT) {
             yohane.takeDamage(1.0f);
@@ -354,17 +434,32 @@ public class Floor {
         }
     }
 
+    /**
+     * Checks whether this floor has been finished
+     * 
+     * @return true if the floor is finished, false otherwise
+     */
     public boolean isFloorFinished() {
         return floorFinished;
     }
 
+    /**
+     * Returns the cause of Yohane's death
+     * 
+     * @return cause of death or an empty string if Yohane is still alive
+     */
     public String getDeathCause() {
         return deathCause;
     }
 
+    /**
+     * Appends the given text to the floors message to be shown the
+     * next time the floor is displayed
+     * 
+     * @param text
+     */
     public void addMessage(String text) {
         this.message += text;
     }
-
 }
 

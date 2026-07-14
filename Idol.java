@@ -71,6 +71,9 @@ public class Idol {
         return this.rescueCount;
     }
 
+    /**
+     * Increments the rescue count by 1
+     */
     public void addRescueCount(){
         this.rescueCount++;
     }
