@@ -70,4 +70,8 @@ public class Idol {
     public int getRescueCount(){
         return this.rescueCount;
     }
+
+    public void addRescueCount(){
+        this.rescueCount++;
+    }
 }
