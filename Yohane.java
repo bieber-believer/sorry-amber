@@ -13,6 +13,9 @@ public class Yohane {
     private int gold;
     private int row, col; // Yohane's position
 
+    private static final String RESET = "\u001B[0m";
+    private static final String GREEN = "\u001B[38;2;0;180;50m";
+
     /**
      * Creates a Yohane object at the given starting position. By default, HP 
      * is 3/3 , 0 gold, and empty inventory
@@ -191,14 +194,14 @@ public class Yohane {
      * to 0 then it is removed from the inventory and current item on hand becomes
      * N/A
      */
-    public void useCurrentItem(){
+    public void useCurrentItem(Floor floor){
         Item item = getCurrentItem();
 
         if(item == null) return;
 
         if(item.getName().equalsIgnoreCase("Noppo Bread")) {
             heal((float) 0.5); // the possible item we can get rn is only noppo bread for mco1
-            floor.addMessage(Menu.GREEN + "You ate Noppo Bread and gained 0.5 HP!" Menu.RESET + "\n");
+            floor.addMessage(GREEN + "You ate Noppo Bread and gained 0.5 HP!" + RESET + "\n");
         }
 
         item.decrementQty();
