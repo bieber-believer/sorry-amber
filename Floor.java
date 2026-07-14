@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Floor {
     private Tile[][] map;
@@ -10,6 +11,19 @@ public class Floor {
     private int dungeonNumber;
     private String dungeonName;
     private int playerTurns = 0;
+    private String message = "";
+    private String deathCause = "";
+
+    private static final String RESET = "\u001B[0m";
+    private static final String RED = "\u001B[38;2;255;0;0m";
+    private static final String GREEN = "\u001B[38;2;0;180;50m";
+    private static final String EXIT_GREEN = "\u001B[38;2;57;255;20m";
+    private static final String YELLOW = "\u001B[38;2;255;255;0m";
+    private static final String BLUE = "\u001B[38;2;33;33;255m";
+    private static final String PINK = "\u001B[38;2;255;105;180m";
+    private static final String CYAN = "\u001B[38;2;0;255;255m";
+    private static final String WHITE = "\u001B[38;2;255;255;255m";
+    private static final String ORANGE = "\u001B[38;2;255;128;0m";
 
     private static final String[] MAP1_TEMPLATE = {
             "*******************************************************",
@@ -36,30 +50,55 @@ public class Floor {
 
     public Yohane getYohane() {
         return yohane;
-}
+    }
 
-    private char getTileSymbol(Tile tile) {
-        switch(tile) {
+    private String tileToColoredString(int row, int col) {
+
+        // Yohane
+        if (yohane.getRow() == row && yohane.getCol() == col)
+            return PINK + "Y " + RESET;
+
+        // Bat
+        for (Bat bat : bats) {
+            if (bat.getRow() == row && bat.getCol() == col) {
+                if (bat.hasJustAttacked())
+                    return RED + "B " + RESET;
+                else
+                    return RED + "b " + RESET;
+            }
+        }
+
+        // Tiles
+        switch (map[row][col]) {
             case PASSABLE:
-                return '.';
+                return ". ";
+
             case WALL:
-                return 'v';
+                return GREEN + "v " + RESET;
+
             case SPIKE:
-                return 'x';
+                return WHITE + "x " + RESET;
+
             case WATER:
-                return 'w';
+                return CYAN + "w " + RESET;
+
             case HEAT:
-                return 'h';
+                return ORANGE + "h " + RESET;
+
             case TREASURE:
-                return 'T';
+                return YELLOW + "T " + RESET;
+
             case EXIT:
-                return 'E';
+                return EXIT_GREEN + "E " + RESET;
+
             case BORDER:
-                return '*';
+                return BLUE + "* " + RESET;
+
             case GOLD:
-                return 'g';
+                return YELLOW + "g " + RESET;
+
             default:
-                return ' ';
+                return "  ";
         }
     }
 
@@ -114,38 +153,21 @@ public class Floor {
     }
 
     public void displayStats() {
-        System.out.println("HP: " + yohane.getHp() + "/" + yohane.getMaxHp());
-        System.out.println("Gold: " + yohane.getGold());
-    }
+        System.out.printf("%-30s%30s%n",
+                "HP: " + yohane.getHp() + "/" + yohane.getMaxHp(),
+                "Gold: " + yohane.getGold());
 
-    public void displayInventory() {
         Item item = yohane.getCurrentItem();
-        if(item == null)
-            System.out.println("Items on Hand: None");
-        else
-            System.out.println("Items on Hand: " + item.getName());
+        System.out.println("Items on Hand: " +
+                (item == null ? "None" : item.getName()));
+
+        System.out.println();
     }
 
     public void displayMap() {
-        for(int row = 0; row < map.length; row++) {
-            for(int col = 0; col < map[row].length; col++) {
-                if(yohane.getRow() == row && yohane.getCol() == col) {
-                    System.out.print('Y');
-                } else {
-                    boolean batFound = false;
-                    for(Bat bat : bats) {
-                        if(bat.getRow() == row && bat.getCol() == col) {
-                            if(bat.hasJustAttacked())
-                                System.out.print('B');
-                            else
-                                System.out.print('b');
-                            batFound = true;
-                            break;
-                        }
-                    }
-                    if(!batFound)
-                        System.out.print(getTileSymbol(map[row][col]));
-                }
+        for (int row = 0; row < map.length; row++) {
+            for (int col = 0; col < map[row].length; col++) {
+                System.out.print(tileToColoredString(row, col));
             }
             System.out.println();
         }
@@ -154,9 +176,14 @@ public class Floor {
     public void displayFloor() {
         displayHeader();
         displayStats();
-        displayInventory();
         System.out.println();
         displayMap();
+
+        if (!message.isEmpty()) {
+            System.out.println();
+            System.out.println(message);
+            message = "";
+        }
     }
 
     public boolean isPassableForYohane(int row, int col) {
@@ -186,7 +213,12 @@ public class Floor {
 
     private void moveBats() {
         for(Bat bat : bats)
-        bat.takeTurn(yohane, this);
+            bat.takeTurn(yohane, this);
+
+        if (yohane.getHp() <= 0 && deathCause.isEmpty()) {
+            deathCause = "a Bat";
+            floorFinished = true;
+        }
     }
 
     public void playerMovement(char direction){
@@ -219,16 +251,16 @@ public class Floor {
                 break;
             }
         }
-        
+
         if (deadBat != null) {
             bats.remove(deadBat);
             map[newRow][newCol] = Tile.GOLD;
-
+            message += GREEN + "You killed the bat! Collect gold from the ground." + RESET + "\n";
             applyHeatDamage();
             endTurn();
             return;
         }
-        
+
         Tile tile = map[newRow][newCol];
         switch (tile){
             case PASSABLE:
@@ -238,7 +270,7 @@ public class Floor {
 
             case WALL:
                 map[newRow][newCol] = Tile.PASSABLE;
-                applyHeatDamage();
+                message += GREEN + "Obstacle cleared! You can now pass." + RESET + "\n";                applyHeatDamage();
                 endTurn();
                 break;
 
@@ -246,18 +278,25 @@ public class Floor {
                 if (Math.random() < 0.5) {
                     int gold = (int)(Math.random() * 91) + 10;
                     yohane.addGold(gold);
+                    map[newRow][newCol] = Tile.PASSABLE;
+                    message += YELLOW + "You got " + gold + " GP!" + RESET + "\n";
                 } else {
                     yohane.addItem(new Item("Noppo Bread"));
+                    map[newRow][newCol] = Tile.PASSABLE;
+                    message += GREEN + "You got Noppo Bread!" + RESET + "\n";
                 }
 
-                map[newRow][newCol] = Tile.PASSABLE;
                 applyHeatDamage();
                 endTurn();
                 break;
 
             case SPIKE:
-                yohane.takeDamage(0.5);
+                yohane.takeDamage(0.5f);
                 map[newRow][newCol] = Tile.PASSABLE;
+                message += RED + "You got 0.5 HP damage from the Spike!" + RESET + "\n";
+                if (yohane.getHp() <= 0) {
+                    this.deathCause = "Spike Damage";
+                }
                 applyHeatDamage();
                 endTurn();
                 break;
@@ -273,16 +312,17 @@ public class Floor {
                 break;
 
             case WATER:
-                System.out.println("You can't pass here! Try going around it.");
+                message += RED + "You can't pass here! Try going around it." + RESET + "\n";
                 break;
 
             case BORDER:
-                System.out.println("You can't go there!");
+                message += RED + "You can't go there!" + RESET + "\n";
                 break;
 
             case GOLD:
                 yohane.addGold(5);
                 map[newRow][newCol] = Tile.PASSABLE;
+                message += YELLOW + "You get 5 GP!" + RESET + "\n";
                 yohane.setPosition(newRow, newCol);
                 endTurn();
                 break;
@@ -300,17 +340,31 @@ public class Floor {
 
     public void waitTurn() {
         applyHeatDamage();
+       message += RED + "Invalid input! You stayed in the same place." + RESET + "\n";
         endTurn();
     }
 
     private void applyHeatDamage() {
-        if(map[yohane.getRow()][yohane.getCol()] == Tile.HEAT)
-            yohane.takeDamage(0.5f);
+        if (map[yohane.getRow()][yohane.getCol()] == Tile.HEAT) {
+            yohane.takeDamage(1.0f);
+            message += RED + "You took 1 HP damage from the heat!" + RESET + "\n";
+            if (yohane.getHp() <= 0) {
+                this.deathCause = "Extreme Heat";
+            }
         }
+    }
 
     public boolean isFloorFinished() {
         return floorFinished;
     }
-}
 
+    public String getDeathCause() {
+        return deathCause;
+    }
+
+    public void addMessage(String text) {
+        this.message += text;
+    }
+
+}
 
