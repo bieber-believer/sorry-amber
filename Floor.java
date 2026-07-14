@@ -206,10 +206,8 @@ public class Floor {
             case 'D':
                 newCol++;
                 break;
-            case 'X':
-                waitTurn();
-                return;
             default:
+                waitTurn();
                 return;
         }
 
