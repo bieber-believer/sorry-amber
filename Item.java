@@ -1,6 +1,6 @@
 /**
  * Represents an item that Yohane can obtain or purchase.
- * 
+ *
  * Item
  */
 
@@ -11,7 +11,7 @@ public class Item {
 
     /**
      * Creates an Item object you can get from the treasure tile.
-     * 
+     *
      * @param name name of item
      */
     public Item(String name){
@@ -22,7 +22,7 @@ public class Item {
     /**
      * Constructs an Item with a name and price. This is intended for items available
      * for purchase in the shop. The item starts with a quantity of 1.
-     * 
+     *
      * @param name name of item
      * @param price price of item
      */
@@ -49,7 +49,7 @@ public class Item {
 
     /**
      * Returns the name of the item
-     * 
+     *
      * @return name of item
      */
     public String getName() {
@@ -58,7 +58,7 @@ public class Item {
 
     /**
      * Returns the price of the item
-     * 
+     *
      * @return price of item
      */
     public int getPrice() {
@@ -67,7 +67,7 @@ public class Item {
 
     /**
      * Returns the currenty quantity of held item
-     * 
+     *
      * @return quantity of item
      */
     public int getQuantity() {
