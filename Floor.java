@@ -307,7 +307,7 @@ public class Floor {
                 newCol++;
                 break;
             case ' ':
-                yohane.useCurrentItem();
+                yohane.useCurrentItem(this);
                 applyHeatDamage(); // check if she used an item on a heat tile
                 endTurn(); // count as turn
                 break;
