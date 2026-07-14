@@ -196,8 +196,10 @@ public class Yohane {
 
         if(item == null) return;
 
-        if(item.getName().equalsIgnoreCase("Noppo Bread"))
+        if(item.getName().equalsIgnoreCase("Noppo Bread")) {
             heal((float) 0.5); // the possible item we can get rn is only noppo bread for mco1
+            floor.addMessage(Menu.GREEN + "You ate Noppo Bread and gained 0.5 HP!" Menu.RESET + "\n");
+        }
 
         item.decrementQty();
         if(item.getQuantity() == 0){
