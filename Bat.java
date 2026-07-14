@@ -1,14 +1,10 @@
+import java.util.Random;
+
 /**
  * Represents a bat in the dungeon. Bats move randomly depending on
  * the dungeon and can attack Yohane if Yohane is adjacent to the bat.
  * Bats damage and movement depends on the dungeon they are in.
- *
- * Bats
  */
-
-import java.util.Random;
-
-
 public class Bat {
     private int row, col; // bat's position
     private boolean justAttacked; // will help change b to B
@@ -82,6 +78,12 @@ public class Bat {
         } // if its not passable bat just stays put
     }
 
+    /**
+     * Simulates a bat's turn
+     *
+     * @param yohane the player
+     * @param floor floor bat is on
+     */
     public void takeTurn(Yohane yohane, Floor floor){
         if(isAdjacentTo(yohane.getRow(), yohane.getCol())){
             yohane.takeDamage(attackDamage);

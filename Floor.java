@@ -1,13 +1,13 @@
-/**
- * Represents a single floor within the dungeon. Holds the floor layout, bats on 
- * the floor, and Yohane. Handles displaying floor and floor information, processes
- * player movement and bat turns.
- * 
- * Floor
- */
-
 import java.util.ArrayList;
 import java.util.Scanner;
+
+/**
+ * Represents a single floor within the dungeon. Holds the floor layout, bats on
+ * the floor, and Yohane. Handles displaying floor and floor information, processes
+ * player movement and bat turns.
+ *
+ * Floor
+ */
 
 public class Floor {
     private Tile[][] map;
@@ -477,7 +477,7 @@ public class Floor {
      * Appends the given text to the floors message to be shown the
      * next time the floor is displayed
      * 
-     * @param text
+     * @param text text that will be appended
      */
     public void addMessage(String text) {
         this.message += text;

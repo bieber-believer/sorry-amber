@@ -1,3 +1,7 @@
+/**
+ * This class represent 1 dungeon of the game.
+ */
+
 public class Dungeon {
     private Floor floor;
     private int dungeonNumber;

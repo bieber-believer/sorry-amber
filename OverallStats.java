@@ -1,11 +1,12 @@
+import java.util.ArrayList;
+
 /**
- * This holds the overall stats of the game. It includes how many times a certain idol was saved, 
+ * This holds the overall stats of the game. It includes how many times a certain idol was saved,
  * the amount of times the siren was deafeated, number of games lost, and the total amount of gold
  * spent in hanamaru's shop.
- * 
+ *
  * OverallStats
  */
-import java.util.ArrayList;
 
 public class OverallStats {
     private ArrayList<Idol> aqours; // the aqours ppl

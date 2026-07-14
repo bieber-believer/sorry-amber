@@ -1,10 +1,10 @@
+import java.util.ArrayList;
+
 /**
  * Represents the player. Tracks her position, health, gold, iventory.
  *
  * Yohane
  */
-
-import java.util.ArrayList;
 
 public class Yohane {
     private float hp, maxHp; // her current hp and max hp she can have
@@ -20,8 +20,8 @@ public class Yohane {
      * Creates a Yohane object at the given starting position. By default, HP 
      * is 3/3 , 0 gold, and empty inventory
      *
-     * @param x starting x position (the col in the 2d array)
-     * @param y starting y position (the row in the 2d array)
+     * @param row starting x position (the col in the 2d array)
+     * @param col starting y position (the row in the 2d array)
      */
     public Yohane(int row, int col){
         this.row = row;
@@ -68,7 +68,7 @@ public class Yohane {
     /**
      * Yohane takes damage and reduces her HP by the given amount
      *
-     * @param damage
+     * @param damage amount of damage yohane receives
      */
     public void takeDamage(float damage){
         this.hp -= damage;
@@ -193,6 +193,8 @@ public class Yohane {
      * Use the item current on hand and decremnt its quantity. If item qty drops
      * to 0 then it is removed from the inventory and current item on hand becomes
      * N/A
+     *
+     * @param floor floor yohane is on
      */
     public void useCurrentItem(Floor floor){
         Item item = getCurrentItem();

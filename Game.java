@@ -1,12 +1,11 @@
+import java.util.Scanner;
+
 /**
  * Handles the overall game. In charge of the menu loop, new playthroughs
  * and the dungeon gameplay.
- * 
+ *
  * Game
  */
-
-import java.util.Scanner;
-
 public class Game {
     private Dungeon dungeon;
     private Scanner scanner;

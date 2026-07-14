@@ -1,11 +1,10 @@
-/**
- * Handles the menu screens.
- * 
- * Menu
- */
-
 import java.util.Scanner;
 
+/**
+ * Handles the menu screens.
+ *
+ * Menu
+ */
 public class Menu {
     private Scanner scanner;
 
@@ -19,7 +18,7 @@ public class Menu {
     /**
      * Creates a Menu object using the given scannerm which will 
      * be used for reading input
-     * @param scanner
+     * @param scanner scanner to read player input from
      */
     public Menu(Scanner scanner) {
         this.scanner = scanner;
