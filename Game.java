@@ -3,27 +3,96 @@ import java.util.Scanner;
 public class Game {
     private Dungeon dungeon;
     private Scanner scanner;
+    private Menu menu;
+    private Floor floor;
+    private boolean hasPlayedBefore = false;
+    private OverallStats stats;
+    private int carriedOverGold = 0;
 
     public Game() {
-        dungeon = new Dungeon();
         scanner = new Scanner(System.in);
+        menu = new Menu(scanner);
+        stats = new OverallStats();
     }
 
     public void start() {
-        Floor floor = dungeon.getFloor();
+        boolean running = true;
+
+        while (running) {
+            char choice = menu.getChoice(hasPlayedBefore);
+
+            switch (choice) {
+                case 'n':
+                    if (!hasPlayedBefore)
+                        carriedOverGold = 0;
+
+                    while (true) {
+                        playGame();
+                        if (floor == null) {
+                            break;
+                        }
+                        hasPlayedBefore = true;
+                        boolean won = floor.getYohane().getHp() > 0;
+
+                        if (!won) {
+                            stats.addGamesLost();
+                        } else {
+                            stats.getAqours().get(0).addRescueCount();
+                        }
+
+                        carriedOverGold = floor.getYohane().getGold();
+
+                        char endChoice = menu.displayEndScreen(won, hasPlayedBefore, floor.getDeathCause());
+                        if (endChoice == 'n') {
+                            continue;
+                        }
+                        if (endChoice == 'm') {
+                            break;
+                        }
+                        if (endChoice == 'q') {
+                            running = false;
+                            break;
+                        }
+                    }
+                    break;
+
+                case 's':
+                    menu.displayStatus(stats);
+                    break;
+
+                case 'q':
+                    running = false;
+                    break;
+            }
+        }
+    }
+
+    private void playGame() {
+        int dungeonChoice = menu.chooseDungeon();
+
+        switch (dungeonChoice) {
+            case 1:
+                dungeon = new Dungeon();
+                break;
+
+            case 2:
+            case 3:
+                return;
+        }
+
+        floor = dungeon.getFloor();
+        floor.getYohane().addGold(carriedOverGold);
 
         while (!floor.isFloorFinished() && floor.getYohane().getHp() > 0) {
             floor.displayFloor();
 
-            System.out.print("Move (W/A/S/D/X): ");
-            char input = Character.toUpperCase(scanner.next().charAt(0));
+            System.out.print("Move (W/A/S/D): ");
+            String inputStr = scanner.nextLine().trim();
 
-            floor.playerMovement(input);
+            if (!inputStr.isEmpty()) {
+                char input = Character.toUpperCase(inputStr.charAt(0));
+                floor.playerMovement(input);
+            }
         }
-
-        if (floor.getYohane().getHp() <= 0)
-            System.out.println("Game Over!");
-        else
-            System.out.println("Floor Cleared!");
     }
 }
