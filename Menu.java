@@ -3,38 +3,33 @@ import java.util.Scanner;
 public class Menu {
     private Scanner scanner;
 
-    private static final Color blue = new Color(0x2121FF);
-    private static final Color green = new Color(0x00B432);
-    private static final Color yellow = new Color(0xFFFF00);
-    private static final Color red = new Color(0xFF0000);
-    private static final Color cyan = new Color(0x00FFFF);
+    private static final String RESET = "\u001B[0m";
+    private static final String BLUE = "\u001B[38;2;33;33;255m";
+    private static final String GREEN = "\u001B[38;2;0;180;50m";
+    private static final String YELLOW = "\u001B[38;2;255;255;0m";
+    private static final String RED = "\u001B[38;2;255;0;0m";
+    private static final String CYAN = "\u001B[38;2;0;255;255m";
 
     public Menu(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    private void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
     public void displayMenu(boolean hasPlayedBefore) {
-        clearScreen();
 
-        System.out.println(blue + "       ************************************************");
-        System.out.println(blue + "       *" + cyan + "             Yohane The Parhelion!            " + blue + "*");
-        System.out.println(blue + "       *" + cyan + "        The Siren in the Mirror World!        " + blue + "*");
-        System.out.println(blue + "       ************************************************");
+        System.out.println(BLUE + "       ************************************************");
+        System.out.println(BLUE + "       *" + CYAN + "             Yohane The Parhelion!            " + BLUE + "*");
+        System.out.println(BLUE + "       *" + CYAN + "        The Siren in the Mirror World!        " + BLUE + "*");
+        System.out.println(BLUE + "       ************************************************");
         System.out.println();
 
         if (hasPlayedBefore)
-            System.out.println(green + "                 [N]ew Game+");
+            System.out.println(GREEN + "                 [N]ew Game+");
         else
-            System.out.println(green + "                 [N]ew Game");
+            System.out.println(GREEN + "                 [N]ew Game");
 
-        System.out.println(yellow + "                 [S]tatus");
-        System.out.println(red + "                 [Q]uit");
-        System.out.println(blue + "       ************************************************");
+        System.out.println(YELLOW + "                 [S]tatus");
+        System.out.println(RED + "                 [Q]uit");
+        System.out.println(BLUE + "       ************************************************" + RESET);
         System.out.println();
     }
 
@@ -46,7 +41,7 @@ public class Menu {
             displayMenu(hasPlayedBefore);
 
             if (errorMessage != null)
-                System.out.println(red + errorMessage);
+                System.out.println(RED + errorMessage);
 
             System.out.print("Your choice: ");
             String input = scanner.nextLine().trim().toLowerCase();
@@ -71,11 +66,10 @@ public class Menu {
     }
 
     public void displayStatus(OverallStats stats) {
-        clearScreen();
 
-        System.out.println(blue + "       ************************************************");
-        System.out.println(cyan + "                    Overall Status");
-        System.out.println(blue + "       ************************************************");
+        System.out.println(BLUE + "       ************************************************" + RESET);
+        System.out.println(CYAN + "                       Overall Status" + RESET );
+        System.out.println(BLUE + "       ************************************************" + RESET);
         System.out.println();
 
         for (Idol idol : stats.getAqours()) {
@@ -96,9 +90,88 @@ public class Menu {
                 stats.getGoldSpent());
 
         System.out.println();
-        System.out.println(blue + "       ************************************************");
+        System.out.println(BLUE + "       ************************************************" + RESET);
 
         System.out.print("Press Enter to return to the menu...");
         scanner.nextLine();
+    }
+
+    public char displayEndScreen(boolean won, boolean hasPlayedBefore, String deathCause) {
+        System.out.println();
+
+        if (won) {
+            System.out.println(BLUE + "       ************************************************");
+            System.out.println(BLUE + "       *" + GREEN + "                 DUNGEON COMPLETED            " + BLUE + "*");
+            System.out.println(BLUE + "       *" + GREEN + "                 Chika is Rescued!            " + BLUE + "*");
+            System.out.println(BLUE + "       ************************************************" + RESET);
+        } else {
+            System.out.println(BLUE + "       ************************************************");
+            System.out.println(BLUE + "       *" + RED + "                 GAME OVER                " + BLUE + "*");
+
+            String deathMessage = "You got killed by " + deathCause + "!";
+            System.out.printf(BLUE + "       * " + RED + "%-44s" + BLUE + " *%n" + RESET, deathMessage);
+            System.out.println(BLUE + "       ************************************************" + RESET);
+        }
+
+        System.out.println();
+
+        if (hasPlayedBefore)
+            System.out.println(GREEN + "                 [N]ew Game+" + RESET);
+        else
+            System.out.println(GREEN + "                 [N]ew Game" + RESET);
+
+        System.out.println(YELLOW + "                 [M]ain Menu" + RESET);
+        System.out.println(RED + "                 [Q]uit" + RESET);
+        System.out.println();
+
+        while (true) {
+            System.out.print("Your choice: ");
+            String input = scanner.nextLine().trim().toLowerCase();
+
+            if (input.isEmpty()) {
+                continue;
+            }
+
+            char choice = input.charAt(0);
+            switch (choice) {
+                case 'n':
+                case 'm':
+                case 'q':
+                    return choice;
+            }
+
+            System.out.println(RED + "                 Invalid input! Please enter N, M, or Q." + RESET);
+        }
+    }
+
+    public int chooseDungeon() {
+        while (true) {
+            System.out.println(BLUE + "       ************************************************" + RESET);
+            System.out.println(CYAN + "            Lailaps: Where are we heading, Yohane?" + RESET);
+            System.out.println(BLUE + "       ************************************************" + RESET);
+            System.out.println();
+
+            System.out.println(GREEN + "                 [1] Izu-Mito Sea Paradise" + RESET);
+            System.out.println(YELLOW + "                 [2] Under Construction" + RESET);
+            System.out.println(RED + "                 [3] Under Construction" + RESET);
+            System.out.println();
+
+            System.out.print("Your choice: ");
+            String input = scanner.nextLine().trim();
+
+            switch (input) {
+                case "1":
+                    return 1;
+
+                case "2":
+                    return 2;
+
+                case "3":
+                    return 3;
+
+                default:
+                    System.out.println("Invalid input!");
+            }
+        }
     }
 }
