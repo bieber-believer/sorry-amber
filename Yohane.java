@@ -1,13 +1,13 @@
 /**
  * Represents the player. Tracks her position, health, gold, iventory.
- * 
+ *
  * Yohane
  */
 
 import java.util.ArrayList;
 
 public class Yohane {
-    private float hp, maxHp; // her current hp and max hp shec can have
+    private float hp, maxHp; // her current hp and max hp she can have
     private ArrayList<Item> inventory;
     private int currentItemIndex;
     private int gold;
@@ -16,17 +16,17 @@ public class Yohane {
     /**
      * Creates a Yohane object at the given starting position. By default, HP 
      * is 3/3 , 0 gold, and empty inventory
-     * 
+     *
      * @param x starting x position (the col in the 2d array)
      * @param y starting y position (the row in the 2d array)
      */
     public Yohane(int row, int col){
         this.row = row;
         this.col = col;
-        this.hp = 3.0;
-        this.maxHp = 3.0;
+        this.hp = 3.0f;
+        this.maxHp = 3.0f;
         this.gold = 0;
-        this.iventory = new ArrayList<>();
+        this.inventory = new ArrayList<>();
         this.currentItemIndex = -1; // -1 if inventory is empty
     }
 
@@ -34,7 +34,7 @@ public class Yohane {
     /**
      * Updates Yohane's position given the x and y.
      * Called by dungeon after checking move input
-     * 
+     *
      * @param row new row position
      * @param col new col position
      */
@@ -45,7 +45,7 @@ public class Yohane {
 
     /**
      * Returns Yohane's current row position
-     * 
+     *
      * @return current row
      */
     public int getRow() {
@@ -54,7 +54,7 @@ public class Yohane {
 
     /**
      * Returns Yohane's current column position
-     * 
+     *
      * @return current column (y)
      */
     public int getCol() {
@@ -64,7 +64,7 @@ public class Yohane {
     // methods that has smth to do with hp and killing the evil things
     /**
      * Yohane takes damage and reduces her HP by the given amount
-     * 
+     *
      * @param damage
      */
     public void takeDamage(float damage){
@@ -74,7 +74,7 @@ public class Yohane {
 
     /**
      * Heals Yohane by the given amount
-     * 
+     *
      * @param restored amount of hp restored
      */
     public void heal(float restored){
@@ -84,7 +84,7 @@ public class Yohane {
 
     /**
      * Checks whether Yohane is still alive
-     * 
+     *
      * @return true if HP is above 0, false otherwise
      */
     public boolean isAlive(){
@@ -93,7 +93,7 @@ public class Yohane {
 
     /**
      * Returns Yohane's current hp
-     * 
+     *
      * @return current hp
      */
     public float getHp() {
@@ -102,7 +102,7 @@ public class Yohane {
 
     /**
      * Returns Yohane's max hp
-     * 
+     *
      * @return max hp
      */
     public float getMaxHp() {
@@ -112,16 +112,16 @@ public class Yohane {
     // for the moolah
     /**
      * Add gold to Yohane's total gold
-     * 
+     *
      * @param amount amount of gold to add
      */
     public void addGold(int amount){
         this.gold += amount;
     }
-    
+
     /**
      * Returns the total gold Yohane has currently
-     * 
+     *
      * @return current gold
      */
     public int getGold() {
@@ -133,12 +133,12 @@ public class Yohane {
      * Adds an item to Yohane's inventory. If an Yohane already has that item,
      * its quantity gets incremented. If this is the first item picked up, it 
      * becomes the item on hand.
-     * 
+     *
      * @param newItem item to add
      */
     public void addItem(Item newItem){
         //to check if yohane already has that item
-        for(Item item : iventory){ // hi amber, this means "for each item in the inventory". this is a for each loop
+        for(Item item : inventory){ // hi amber, this means "for each item in the inventory". this is a for each loop
             if(item.getName().equals(newItem.getName())){
                 item.incrementQty(); // add +1 to qty
                 return;
@@ -146,32 +146,32 @@ public class Yohane {
         }
 
         //if yohane dont have that item yet
-        iventory.add(newItem);
+        inventory.add(newItem);
 
         if(currentItemIndex == -1) // -1 means empty
-            currentItemIndex = iventory.size() - 1; // sets the item index to 0 if yohane has nthg on hand
-                                                    // inventory.size = 1 after adding the item so index becomes 0
+            currentItemIndex = inventory.size() - 1; // sets the item index to 0 if yohane has nthg on hand
+        // inventory.size = 1 after adding the item so index becomes 0
     }
 
     /**
      * Returns the current item on hand, null if no items
-     * 
+     *
      * @return current item, null if none
      */
     public Item getCurrentItem(){
-        if(iventory.isEmpty() || currentItemIndex == -1) return null;
-        
-        return iventory.get(currentItemIndex);
+        if(inventory.isEmpty() || currentItemIndex == -1) return null;
+
+        return inventory.get(currentItemIndex);
     }
 
     /**
      * Switches the item on hand to the next item in the inventory
      */
     public void switchToNextItem(){
-        if(iventory.isEmpty()) return;
+        if(inventory.isEmpty()) return;
 
         currentItemIndex++;
-        if(currentItemIndex >= iventory.size())
+        if(currentItemIndex >= inventory.size())
             currentItemIndex = 0; // go back to the first item
     }
 
@@ -179,11 +179,11 @@ public class Yohane {
      * Switches the item on hand to the previous item in the inventory
      */
     public void switchToPreviousItem(){
-        if(iventory.isEmpty()) return;
+        if(inventory.isEmpty()) return;
 
         currentItemIndex--;
         if(currentItemIndex < 0)
-            currentItemIndex = iventory.size() - 1; // go to the last item in list
+            currentItemIndex = inventory.size() - 1; // go to the last item in list
     }
 
     /**
@@ -198,20 +198,20 @@ public class Yohane {
 
         if(item.getName().equalsIgnoreCase("Noppo Bread"))
             heal((float) 0.5); // the possible item we can get rn is only noppo bread for mco1
-        
+
         item.decrementQty();
         if(item.getQuantity() == 0){
-            iventory.remove(item);
+            inventory.remove(item);
             currentItemIndex = -1; // players has to [ ] to have smth on hand
         }
     }
 
     /**
      * Returns Yohane's entire inventory
-     * 
+     *
      * @return list of items in inventory
      */
     public ArrayList<Item> getIventory() {
-        return this.iventory;
+        return this.inventory;
     }
 }
