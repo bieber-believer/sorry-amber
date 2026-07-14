@@ -75,6 +75,7 @@ public class Game {
 
                 case 'q':
                     running = false;
+                    System.out.println("See you again soon!");
                     break;
             }
         }
