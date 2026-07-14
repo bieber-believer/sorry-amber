@@ -50,7 +50,7 @@ public class Game {
                         if (!won) {
                             stats.addGamesLost();
                         } else {
-                            stats.getAqours().get(0).addRescueCount();
+                            stats.getAqours().get(2).rescue();
                         }
 
                         carriedOverGold = floor.getYohane().getGold();
@@ -82,7 +82,7 @@ public class Game {
 
     /**
      * Lets player choose a dungeon then run the dungeon until the floor
-     * is finished or Yohane dies
+     * is finished or Yohane dies.
      */
     private void playGame() {
         int dungeonChoice = menu.chooseDungeon();
@@ -94,6 +94,7 @@ public class Game {
 
             case 2: // only 1 deungeon implemented so far
             case 3:
+                System.out.println("This dungeon isn't available yet!");
                 return;
         }
 
@@ -108,7 +109,7 @@ public class Game {
 
             if (!inputStr.isEmpty()) {
                 char input = Character.toUpperCase(inputStr.charAt(0));
-                floor.playerMovement(input);
+                floor.playerAction(input);
             }
         }
     }

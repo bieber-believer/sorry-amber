@@ -287,13 +287,13 @@ public class Floor {
     /**
      * Processes the players movement as well as tile interactions
      * 
-     * @param direction direction yohane will move (WASD)
+     * @param action input of player regarding yohane's next move
      */
-    public void playerMovement(char direction){
+    public void playerAction(char action){
         int newRow = yohane.getRow();
         int newCol = yohane.getCol();
 
-        switch (direction) {
+        switch (action) {
             case 'W':
                 newRow--;
                 break;
@@ -305,6 +305,21 @@ public class Floor {
                 break;
             case 'D':
                 newCol++;
+                break;
+            case ' ':
+                yohane.useCurrentItem();
+                applyHeatDamage(); // check if she used an item on a heat tile
+                endTurn(); // count as turn
+                break;
+            case '[':
+                yohane.switchToPreviousItem();
+                applyHeatDamage(); // check if she used an item on a heat tile
+                endTurn();
+                break;
+            case ']':
+                yohane.switchToNextItem();
+                applyHeatDamage(); // check if she used an item on a heat tile
+                endTurn();
                 break;
             default:
                 waitTurn();
@@ -349,10 +364,12 @@ public class Floor {
                     yohane.addGold(gold);
                     map[newRow][newCol] = Tile.PASSABLE;
                     message += YELLOW + "You got " + gold + " GP!" + RESET + "\n";
+                    yohane.setPosition(newRow, newCol);
                 } else {
                     yohane.addItem(new Item("Noppo Bread"));
                     map[newRow][newCol] = Tile.PASSABLE;
                     message += GREEN + "You got Noppo Bread!" + RESET + "\n";
+                    yohane.setPosition(newRow, newCol);
                 }
 
                 applyHeatDamage(); // check to see if she on heat tile
@@ -382,10 +399,14 @@ public class Floor {
 
             case WATER:
                 message += RED + "You can't pass here! Try going around it." + RESET + "\n";
+                applyHeatDamage(); // check to see if on heat tile
+                endTurn();
                 break;
 
             case BORDER:
                 message += RED + "You can't go there!" + RESET + "\n";
+                applyHeatDamage();
+                endTurn();
                 break;
 
             case GOLD:

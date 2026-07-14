@@ -140,7 +140,7 @@ public class Menu {
         if (won) {
             System.out.println(BLUE + "       ************************************************");
             System.out.println(BLUE + "       *" + GREEN + "                 DUNGEON COMPLETED            " + BLUE + "*");
-            System.out.println(BLUE + "       *" + GREEN + "                 Chika is Rescued!            " + BLUE + "*");
+            System.out.println(BLUE + "       *" + GREEN + "                 You is Rescued!            " + BLUE + "*");
             System.out.println(BLUE + "       ************************************************" + RESET);
         } else {
             System.out.println(BLUE + "       ************************************************");

@@ -86,7 +86,7 @@ public class Bat {
         if(isAdjacentTo(yohane.getRow(), yohane.getCol())){
             yohane.takeDamage(attackDamage);
             justAttacked = true;
-            floor.addMessage(RED + "You have been attacked by a bat! You lose 5 HP!" + RESET + "\n");
+            floor.addMessage(RED + "You have been attacked by a bat! You lose 0.5 HP!" + RESET + "\n");
             return; //bat dont move after attack
         }
 
