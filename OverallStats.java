@@ -67,15 +67,15 @@ public class OverallStats {
      * @return total gold spent
      */
     public int getGoldSpent() {
-    return goldSpent;
+        return goldSpent;
 }
 
     public void addGoldSpent(int amount) {
-    goldSpent += amount;
+        goldSpent += amount;
 }
 
     public void addGamesLost() {
-        gamesLost++;
+        this.gamesLost++;
     }
 
     public void addNumSiren() {
