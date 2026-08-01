@@ -1,4 +1,8 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+
 
 /**
  * Handles the overall game. In charge of the menu loop, new playthroughs
@@ -7,7 +11,11 @@ import java.util.Scanner;
  * Game
  */
 public class Game {
-    private Dungeon dungeon;
+    private ArrayList<Dungeon> selectedDungeons;
+    private Dungeon currentDungeon;
+    private Yohane yohane;
+    private int nextDungeonNumber;
+
     private Scanner scanner;
     private Menu menu;
     private Floor floor;
@@ -22,6 +30,10 @@ public class Game {
         scanner = new Scanner(System.in);
         menu = new Menu(scanner);
         stats = new OverallStats();
+        selectedDungeons = new ArrayList<>();
+        currentDungeon = null;
+        nextDungeonNumber = 1;
+
     }
 
     /**
@@ -35,37 +47,7 @@ public class Game {
 
             switch (choice) {
                 case 'n':
-                    if (!hasPlayedBefore)
-                        carriedOverGold = 0;
-
-                    while (true) {
-                        playGame();
-                        if (floor == null) {
-                            break;
-                        }
-                        hasPlayedBefore = true;
-                        boolean won = floor.getYohane().getHp() > 0;
-
-                        if (!won) {
-                            stats.addGamesLost();
-                        } else {
-                            stats.getAqours().get(2).rescue();
-                        }
-
-                        carriedOverGold = floor.getYohane().getGold();
-
-                        char endChoice = menu.displayEndScreen(won, hasPlayedBefore, floor.getDeathCause());
-                        if (endChoice == 'n') {
-                            continue;
-                        }
-                        if (endChoice == 'm') {
-                            break;
-                        }
-                        if (endChoice == 'q') {
-                            running = false;
-                            break;
-                        }
-                    }
+                    newGame();
                     break;
 
                 case 's':
@@ -81,36 +63,132 @@ public class Game {
     }
 
     /**
-     * Lets player choose a dungeon then run the dungeon until the floor
-     * is finished or Yohane dies.
+     * Starts a new game
      */
-    private void playGame() {
-        int dungeonChoice = menu.chooseDungeon();
+    private void newGame() {
+        yohane = new Yohane();
+        generateDungeons();
+        gameplayLoop();
+    }
 
-        switch (dungeonChoice) {
-            case 1:
-                dungeon = new Dungeon();
-                break;
+    /**
+     * Starts a new game+.
+     * Available only after a player completes one playthrough.
+     * Gold from previous playthrough is carried over.
+     */
+    private void newGamePlus() {
+        yohane = new Yohane();
+        yohane.addGold(carriedOverGold);
+        generateDungeons();
+        gameplayLoop();
+    }
 
-            case 2: // only 1 deungeon implemented so far
-            case 3:
-                System.out.println("This dungeon isn't available yet!");
-                return;
-        }
+    /**
+     * This chooses the 3 of 8 dungeons that will be played every start of
+     * a game
+     */
+    private void generateDungeons() {
+        // clear previous dungeons
+        selectedDungeons = new ArrayList<>();
+        Random rand = new Random();
 
-        floor = dungeon.getFloor();
-        floor.getYohane().addGold(carriedOverGold);
+        // tracks which dungeons are chosen
+        boolean[] used = new boolean[8];
 
-        while (!floor.isFloorFinished() && floor.getYohane().getHp() > 0) {
-            floor.displayFloor();
+        // select until 3 dungeons are chosen
+        while (selectedDungeons.size() < 3) {
+            int index = rand.nextInt(8); // randomly picks dungeons
 
-            System.out.print("Move (W/A/S/D), Use Item(Spacebar): ");
-            String inputStr = scanner.nextLine();
-
-            if (!inputStr.isEmpty()) {
-                char input = Character.toUpperCase(inputStr.charAt(0));
-                floor.playerAction(input);
+            if(!used[index]) { // skip if dungeon is already selected
+                used[index] = true;
+                selectedDungeons.add(createDungeon(index));
             }
         }
+    }
+
+    /**
+     * Creates a dungeon
+     *
+     * @param index index of the selected dungeon location
+     * @return the created dungeon
+     */
+    private Dungeon createDungeon(int index) {
+        switch (index) {
+            case 0:
+                return new Dungeon(
+                        "Izu-Mito Sea Paradise",
+                        stats.getAqours().get(2)
+                );
+
+            case 1:
+                return new Dungeon(
+                        "Yasudaya Ryokan",
+                        stats.getAqours().get(0)
+                );
+
+            case 2:
+                return new Dungeon(
+                        "Numazu Deep Sea Aquarium",
+                        stats.getAqours().get(1)
+                );
+
+            case 3:
+                return new Dungeon(
+                        "Shougetsu Confectionary",
+                        stats.getAqours().get(3)
+                );
+
+            case 4:
+                return new Dungeon(
+                        "Nagahama Castle Ruins",
+                        stats.getAqours().get(4)
+                );
+
+            case 5:
+                return new Dungeon(
+                        "Numazugoyotei",
+                        stats.getAqours().get(5)
+                );
+
+            case 6:
+                return new Dungeon(
+                        "Uchiura Bay Pier",
+                        stats.getAqours().get(6)
+                );
+
+            case 7:
+                return new Dungeon(
+                        "Awashima Marine Park",
+                        stats.getAqours().get(7)
+                );
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Loops through the game
+     */
+    private void gameplayLoop() {
+        while (!allDungeonsCleared()) {
+
+            // let player choose dungeon
+            int choice = menu.chooseDungeon(selectedDungeons);
+
+            // get selected dungeon
+            currentDungeon = selectedDungeons.get(choice - 1);
+
+            // play selected dungeon
+            playDungeon(currentDungeon);
+        }
+        // final dungeon implementation
+    }
+
+    /**
+     * Plays the selected dungeon
+     */
+    private void playDungeon() {
+
     }
 }
