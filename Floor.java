@@ -58,11 +58,12 @@ public class Floor {
      * @param floorNumber current floor number
      * @param totalFloors total number of floors in the dungeon
      */
-    public Floor(int dungeonNumber, String dungeonName, int floorNumber, int totalFloors) {
+    public Floor(int dungeonNumber, String dungeonName, int floorNumber, int totalFloors, Yohane yohane) {
         this.dungeonNumber = dungeonNumber;
         this.dungeonName = dungeonName;
         this.floorNumber = floorNumber;
         this.totalFloors = totalFloors;
+        this.yohane = yohane;
         bats = new ArrayList<>();
         generateMap();
     }
@@ -167,7 +168,7 @@ public class Floor {
                         break;
                     case 'Y':
                         map[row][col] = Tile.PASSABLE;
-                        yohane = new Yohane(row, col);
+                        yohane.setPosition(row, col);
                         break;
                     case 'b':
                         map[row][col] = Tile.PASSABLE;
