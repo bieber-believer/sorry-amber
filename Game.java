@@ -46,7 +46,10 @@ public class Game {
 
             switch (choice) {
                 case 'n':
-                    newGame();
+                    if (hasPlayedBefore)
+                        newGamePlus();
+                    else
+                        newGame();
                     break;
 
                 case 's':
@@ -222,8 +225,44 @@ public class Game {
 
         // rescue idol
         dungeon.getIdol().rescue();
-
+        
         dungeon.setCleared(true);
+    }
+
+    /**
+     * Plays the floor in the dungeon
+     *
+     * @param floor floor to be played
+     */
+    private void playFloor(Floor floor) {
+        // continue til the floor is finished or yohane dies
+        while (!floor.isFloorFinished() && yohane.isAlive()) {
+            floor.displayFloor();
+
+            System.out.print("Move (W/A/S/D), Use Item (Space): ");
+
+            String input = scanner.nextLine();
+
+            if (!input.isEmpty()) {
+                floor.playerAction(
+                        Character.toUpperCase(input.charAt(0))
+                );
+            }
+        }
+    }
+
+    /**
+     * Checks if all dungeons are cleared
+     *
+     * @return true if all dungeons are cleared, false if not
+     */
+    private boolean allDungeonsCleared() {
+        for (Dungeon dungeon : selectedDungeons) {
+            if (!dungeon.isCleared())
+                return false;
+        }
+
+        return true;
     }
 
     /**
