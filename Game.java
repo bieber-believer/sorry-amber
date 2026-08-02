@@ -170,23 +170,22 @@ public class Game {
      * Loops through the game
      */
     private void gameplayLoop() {
-        // continues til all 3 dungeons are cleared
+         // continues til all 3 dungeons are cleared
         while (!allDungeonsCleared()) {
 
-            // let player choose dungeon
-            int choice = menu.chooseDungeon(selectedDungeons);
-
-            // get selected dungeon
-            currentDungeon = selectedDungeons.get(choice - 1);
+            // choose dungeon
+            currentDungeon = menu.chooseDungeon(selectedDungeons);
 
             // play selected dungeon
             playDungeon(currentDungeon);
 
+            // stop if yohane dies
             if (!yohane.isAlive()) {
                 return;
             }
         }
 
+        // enter final dungeon
         playFinalDungeon();
     }
 
