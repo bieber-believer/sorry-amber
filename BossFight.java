@@ -93,10 +93,10 @@ public void moveLailaps(int rowChange, int colChange) {
 	}
 
 private void checkSwitches() {
-				// check if Yohane is on her switch
+				// check if Yohane is on switch
     boolean yohaneOnSwitch = isYohaneOnSwitch();
 
-    // check if Lailaps is on his switch
+    // check if Lailaps is on switch
     boolean lailapsOnSwitch = isLailapsOnSwitch();
 
     // both switches activated
@@ -111,6 +111,18 @@ private void checkSwitches() {
         else {
             spawnSwitches();
         }
+}
+
+private void spawnSwitches(int row, int col) {
+								
+}
+
+private boolean isValidSwitchTile(int row, int col) {
+
+}
+
+private void spawnBat(int row, int col) {
+
 }
 
 }
