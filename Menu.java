@@ -183,19 +183,22 @@ public class Menu {
 
     /**
      * Displays the dungeon selection screen and read player input
-     * 
-     * @return the number of chosen dungeon
+     *
+     * @param dungeons the selected dungeon for this playthrough
+     * @return the chosen Dungeon
      */
-    public int chooseDungeon() {
+    public Dungeon chooseDungeon(ArrayList<Dungeon> dungeons) {
         while (true) {
             System.out.println(BLUE + "       ************************************************" + RESET);
             System.out.println(CYAN + "            Lailaps: Where are we heading, Yohane?" + RESET);
             System.out.println(BLUE + "       ************************************************" + RESET);
             System.out.println();
 
-            System.out.println(GREEN + "                 [1] Izu-Mito Sea Paradise" + RESET);
-            System.out.println(YELLOW + "                 [2] Under Construction" + RESET);
-            System.out.println(RED + "                 [3] Under Construction" + RESET);
+            // display selected dungeons
+            for (int i = 0; i < dungeons.size(); i++) {
+                System.out.println((i+1) + "." + dungeons.get(i).getDungeonName());
+            }
+
             System.out.println();
 
             System.out.print("Your choice: ");
@@ -203,13 +206,13 @@ public class Menu {
 
             switch (input) {
                 case "1":
-                    return 1;
+                    return dungeons.get(0);
 
                 case "2":
-                    return 2;
+                    return dungeons.get(1);
 
                 case "3":
-                    return 3;
+                    return dungeons.get(2);
 
                 default:
                     System.out.println("Invalid input!");
