@@ -10,6 +10,7 @@ public class Dungeon {
     private int dungeonNumber;
     private String dungeonName;
     private Idol idol;
+    private boolean cleared;
 
     /**
      * Constructs a dungeon with the dungeon name and idol to be rescued.
@@ -25,6 +26,7 @@ public class Dungeon {
 
         this.floors = new ArrayList<>();
         this.currentFloor = 0;
+        this.cleared = false;
     }
 
     /**
@@ -96,6 +98,24 @@ public class Dungeon {
      */
     public boolean isLastFloor() {
         return currentFloor == floors.size() - 1;
+    }
+
+     /**
+     * Checks whether the dungeon has been completed
+     *
+     * @return true if dungeon has been cleared, false if not
+     */
+    public boolean isCleared() {
+        return cleared;
+    }
+
+    /**
+     * Sets the dungeon to completed
+     *
+     * @param cleared true if dungeon has been cleared, false if not
+     */
+    public void setCleared(boolean cleared) {
+        this.cleared = cleared;
     }
 
     /**
