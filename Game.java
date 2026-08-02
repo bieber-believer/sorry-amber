@@ -171,6 +171,7 @@ public class Game {
      * Loops through the game
      */
     private void gameplayLoop() {
+        // continues til all 3 dungeons are cleared
         while (!allDungeonsCleared()) {
 
             // let player choose dungeon
@@ -181,14 +182,57 @@ public class Game {
 
             // play selected dungeon
             playDungeon(currentDungeon);
+
+            if (!yohane.isAlive()) {
+                return;
+            }
         }
-        // final dungeon implementation
+
+        playFinalDungeon();
     }
 
     /**
      * Plays the selected dungeon
+     *
+     * @param dungeon dungeon to be played
      */
-    private void playDungeon() {
+    private void playDungeon(Dungeon dungeon) {
+        // assign a dungeon number if it is first visit
+        if (dungeon.getDungeonNumber() == 0) {
+            dungeon.startDungeon (nextDungeonNumber, yohane);
+            nextDungeonNumber++;
+        }
+
+        boolean dungeonFinished = false;
+
+        // play each floor
+        while (!dungeonFinished) {
+            Floor floor = dungeon.getCurrentFloor();
+
+            playFloor(floor);
+
+            // stop if yohane dies
+            if (!yohane.isAlive())
+                return;
+
+            // moves to next floor
+            if (dungeon.isLastFloor())
+                dungeonFinished = true;
+            else
+                dungeon.nextFloor();
+        }
+
+        // rescue idol
+        dungeon.getIdol().rescue();
+
+        dungeon.setCleared(true);
+    }
+
+    /**
+     * Plays the final dungeon
+     */
+    private void playFinalDungeon() {
 
     }
+}
 }
